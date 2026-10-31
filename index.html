@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kingdoms of Georgia | Minecraft Server</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0f0f13;
+            --panel-bg: #1a1a24;
+            --accent-gold: #ffb703;
+            --accent-green: #2ec4b6;
+            --accent-red: #e63946;
+            --accent-purple: #9d4edd;
+            --text-light: #f1f1f1;
+            --border-color: #333344;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            background-image: radial-gradient(#1f1f2e 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        header {
+            background: linear-gradient(180deg, #181822 0%, rgba(24, 24, 34, 0.8) 100%);
+            border-bottom: 3px solid var(--accent-gold);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-box {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-box h1 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 16px;
+            color: var(--accent-gold);
+            text-shadow: 2px 2px #000;
+        }
+
+        .user-panel {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn {
+            background: #2a2a3c;
+            color: #fff;
+            border: 2px solid var(--accent-gold);
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 4px;
+            transition: 0.2s;
+        }
+
+        .btn:hover {
+            background: var(--accent-gold);
+            color: #000;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            background: radial-gradient(circle, rgba(255,183,3,0.1) 0%, rgba(0,0,0,0.8) 100%);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .hero h2 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .ip-box {
+            display: inline-block;
+            background: #000;
+            border: 2px dashed var(--accent-gold);
+            padding: 12px 25px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 14px;
+            color: var(--accent-green);
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .shop-filter {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .filter-btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .filter-btn.active {
+            border-color: var(--accent-gold);
+            background: var(--accent-gold);
+            color: #000;
+            font-weight: bold;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--panel-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 15px rgba(255,183,3,0.2);
+        }
+
+        .card.rank { border-color: var(--accent-purple); }
+        .card.item { border-color: var(--accent-green); }
+
+        .card h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .price-tag {
+            font-size: 22px;
+            font-weight: bold;
+            color: var(--accent-gold);
+            margin: 15px 0;
+        }
+
+        /* Modal styling */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--panel-bg);
+            border: 2px solid var(--accent-gold);
+            width: 90%;
+            max-width: 450px;
+            padding: 30px;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px; right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #aaa;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 13px;
+            color: #bbb;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            background: #0f0f13;
+            border: 1px solid var(--border-color);
+            color: #fff;
+            border-radius: 4px;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px; right: 20px;
+            background: var(--accent-green);
+            color: #000;
+            padding: 12px 25px;
+            font-weight: bold;
+            border-radius: 4px;
+            display: none;
+            z-index: 2000;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-box">
+            <h1>KINGDOMS OF GEORGIA</h1>
+        </div>
+        <div class="user-panel">
+            <span id="user-display" style="font-size: 14px; color: var(--accent-gold);"></span>
+            <button class="btn" id="auth-btn" onclick="openAuthModal()">შესვლა / რეგისტრაცია</button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h2>12-ე საუკუნის საქართველო MINECRAFT-ში</h2>
+        <p>შემოუერთდი სერვერს, აირჩიე შენი რანგი და გახდი სამეფოს მმართველი!</p>
+        <div class="ip-box" onclick="copyIP()">
+            IP: KingdomsOfGeorgia.aternos.me
+        </div>
+    </section>
+
+    <div class="container">
+        <h2 style="text-align: center; margin-bottom: 25px; color: var(--accent-gold);">ოფიციალური მაღაზია</h2>
+        
+        <div class="shop-filter">
+            <button class="filter-btn active" onclick="filterShop('all')">ყველა</button>
+            <button class="filter-btn" onclick="filterShop('rank')">რანგები</button>
+            <button class="filter-btn" onclick="filterShop('item')">ქასთომ იარაღი</button>
+            <button class="filter-btn" onclick="filterShop('crate')">ქეისები & ქოინები</button>
+        </div>
+
+        <div class="grid" id="shop-grid">
+            <!-- Items generated via JS -->
+        </div>
+    </div>
+
+    <!-- Auth Modal -->
+    <div class="modal" id="auth-modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('auth-modal')">&times;</span>
+            <h3 style="margin-bottom: 20px; text-align: center; color: var(--accent-gold);">ავტორიზაცია / რეგისტრაცია</h3>
+            <div class="input-group">
+                <label>MINECRAFT NICKNAME (თამაშის სახელი)</label>
+                <input type="text" id="mc-name" placeholder="მაგ: Mepe_Daviti">
+            </div>
+            <div class="input-group">
+                <label>ელფოსტა (EMAIL)</label>
+                <input type="email" id="user-email" placeholder="example@gmail.com">
+            </div>
+            <button class="btn" style="width: 100%; margin-top: 10px;" onclick="saveUser()">შენახვა</button>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="modal" id="pay-modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('pay-modal')">&times;</span>
+            <h3 style="margin-bottom: 15px; text-align: center; color: var(--accent-gold);" id="pay-title">ყიდვა</h3>
+            <p id="pay-desc" style="font-size: 14px; color: #ccc; margin-bottom: 20px; text-align: center;"></p>
+            
+            <div class="input-group">
+                <label>ბარათის ნომერი</label>
+                <input type="text" placeholder="xxxx xxxx xxxx xxxx" maxlength="19">
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <div class="input-group" style="flex: 1;">
+                    <label>ვადა (MM/YY)</label>
+                    <input type="text" placeholder="12/28" maxlength="5">
+                </div>
+                <div class="input-group" style="flex: 1;">
+                    <label>CVC / CVC2</label>
+                    <input type="password" placeholder="123" maxlength="3">
+                </div>
+            </div>
+            <div class="input-group">
+                <label>ბარათის მფლობელი</label>
+                <input type="text" placeholder="სახელი გვარი">
+            </div>
+            <div class="price-tag" id="pay-price" style="text-align: center;">0.00 ₾</div>
+            <button class="btn" style="width: 100%; background: var(--accent-green); color: #000;" onclick="processPayment()">გადახდა</button>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">IP კოპირებულია!</div>
+
+    <script>
+        const products = [
+            { id: 1, type: 'crate', name: 'ლეგენდარული ქეისი', price: '1.00 ₾', desc: 'შანსი მიიღო იშვიათი რესურსები და ქასთომ ნივთები.' },
+            { id: 2, type: 'crate', name: '500 ოქროს მონეტა', price: '1.50 ₾', desc: 'სერვერის შიდა ვალუტა მაღაზიებში გამოსაყენებლად.' },
+            { id: 3, type: 'item', name: 'დავითის ხმალი', price: '2.00 ₾', desc: 'ქასთომ ხმალი (+12 Damage, Sharpness X ეფექტით).' },
+            { id: 4, type: 'item', name: 'ალგეთის ჯავშანი', price: '2.50 ₾', desc: 'სრული ალმასის აბჯარი Protection V ეფექტით.' },
+            { id: 5, type: 'rank', name: 'მეომარი (რანგი)', price: '3.00 ₾', desc: 'VIP სტატუსი, Prefix: [მეომარი], /fly და 3 სახლის set.' },
+            { id: 6, type: 'rank', name: 'თავადი (რანგი)', price: '7.00 ₾', desc: 'VIP+ სტატუსი, Prefix: [თავადი], /kit tavadi, 5 სახლის set.' },
+            { id: 7, type: 'rank', name: 'მეფე (რანგი)', price: '15.00 ₾', desc: 'MVP სტატუსი, Prefix: [მეფე], /heal, /feed, უსასრულო სახლები.' }
+        ];
+
+        let selectedProduct = null;
+
+        function renderProducts(items) {
+            const grid = document.getElementById('shop-grid');
+            grid.innerHTML = '';
+            items.forEach(p => {
+                grid.innerHTML += `
+                    <div class="card ${p.type}">
+                        <div>
+                            <h3>${p.name}</h3>
+                            <p style="font-size: 13px; color: #aaa;">${p.desc}</p>
+                        </div>
+                        <div>
+                            <div class="price-tag">${p.price}</div>
+                            <button class="btn" style="width:100%" onclick="buyProduct(${p.id})">ყიდვა</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function filterShop(type) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            if(type === 'all') renderProducts(products);
+            else renderProducts(products.filter(p => p.type === type));
+        }
+
+        function copyIP() {
+            navigator.clipboard.writeText('KingdomsOfGeorgia.aternos.me');
+            const toast = document.getElementById('toast');
+            toast.style.display = 'block';
+            setTimeout(() => toast.style.display = 'none', 2500);
+        }
+
+        function openAuthModal() {
+            document.getElementById('auth-modal').style.display = 'flex';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        function saveUser() {
+            const name = document.getElementById('mc-name').value;
+            const email = document.getElementById('user-email').value;
+            if(!name || !email) {
+                alert('გთხოვთ ჩაწეროთ ნიკი და მეილი!');
+                return;
+            }
+            localStorage.setItem('mc_user', name);
+            localStorage.setItem('mc_email', email);
+            checkUser();
+            closeModal('auth-modal');
+        }
+
+        function checkUser() {
+            const user = localStorage.getItem('mc_user');
+            if(user) {
+                document.getElementById('user-display').innerText = '👤 ' + user;
+                document.getElementById('auth-btn').innerText = 'პროფილი';
+            }
+        }
+
+        function buyProduct(id) {
+            const user = localStorage.getItem('mc_user');
+            if(!user) {
+                alert('ყიდვამდე გთხოვთ გაიაროთ რეგისტრაცია!');
+                openAuthModal();
+                return;
+            }
+            selectedProduct = products.find(p => p.id === id);
+            document.getElementById('pay-title').innerText = selectedProduct.name;
+            document.getElementById('pay-desc').innerText = selectedProduct.desc;
+            document.getElementById('pay-price').innerText = selectedProduct.price;
+            document.getElementById('pay-modal').style.display = 'flex';
+        }
+
+        function processPayment() {
+            alert('გადახდა წარმატებით დასრულდა! ნივთი/რანგი (' + selectedProduct.name + ') გააქტიურებულია მოთამაშეზე: ' + localStorage.getItem('mc_user'));
+            closeModal('pay-modal');
+        }
+
+        renderProducts(products);
+        checkUser();
+    </script>
+</body>
+</html>
